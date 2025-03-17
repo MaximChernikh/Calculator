@@ -1,4 +1,6 @@
-﻿namespace Calculator
+﻿using System.Runtime.InteropServices;
+
+namespace Calculator
 {
     public class Program
     {
@@ -6,42 +8,42 @@
         {
             Console.WriteLine("Введите выражение: ");
             string inputData = Console.ReadLine();
-            string[] splitedData = inputData.Split(' ');
+            char[] operations = ['+', '-', '/', '*'];
 
-            Calculator calculator = new Calculator
-                (null, 
-                int.Parse(splitedData[0]), 
-                int.Parse(splitedData[2]));
+            int[] extractedNums = (inputData.Split(operations)).Select(int.Parse).ToArray();
+            char[] extractedOperations = inputData.Where(c => operations.Contains(c)).ToArray();
 
+            var calculator = new Calculator<double>(null);
 
-            switch (splitedData[1])
+            double result = extractedNums[0];
+
+            for (int i = 0; i < extractedOperations.Length; i++)
             {
-                case "+":
-                    calculator.OperatorStrategy = new Plus();
-                    calculator.Operate();
-                    break;
-                case "-":
-                    calculator.OperatorStrategy = new Minus();
-                    calculator.Operate();
-                    break;
-                case "*":
-                    calculator.OperatorStrategy = new Multiply();
-                    calculator.Operate();
-                    break;
-                case "/":
-                    calculator.OperatorStrategy = new Divide();
-                    calculator.Operate();
-                    break;
-                default:
-                    Console.WriteLine("Неизвестная операция");
-                    break;
+                switch (extractedOperations[i])
+                {
+                    case '+':
+                        calculator.SetOperator = new Plus();
+                        result = calculator.Operate((int)result, extractedNums[i+1]);
+                        break;
+                    case '-':
+                        calculator.SetOperator = new Minus();
+                        result = calculator.Operate((int)result, extractedNums[i + 1]);
+                        break;
+                    case '*':
+                        calculator.SetOperator = new Multiply();
+                        result = calculator.Operate((int)result, extractedNums[i + 1]);
+                        break;
+                    case '/':
+                        calculator.SetOperator = new Divide();
+                        result = calculator.Operate(extractedNums[i], extractedNums[i + 1]);
+                        break;
+                    default:
+                        Console.WriteLine("Неизвестная операция");
+                        break;
+                }
             }
 
-            //string[] arrayOfInputData = inputData.Split(['+', '-', '/', '*']);
-            //for (int i = 0; i < arrayOfInputData.Length; i++)
-            //{
-            //    arrayOfInputData[i] = arrayOfInputData[i].Trim();
-            //}
+            Console.WriteLine("Результат: " + result);
         }
     }
 }

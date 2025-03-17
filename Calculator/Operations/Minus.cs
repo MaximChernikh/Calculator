@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Calculator
 {
-    internal class Minus : IOperatorStrategy
+    internal class Minus : IOperatorStrategy<double>
     {
-        public void Operate(int a, int b)
+        public double Operate(double a, double b)
         {
-            Console.WriteLine(a - b);
+            return a - b;
         }
     }
 }

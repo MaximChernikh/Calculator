@@ -6,23 +6,19 @@ using System.Threading.Tasks;
 
 namespace Calculator
 {
-    internal class Calculator
+    internal class Calculator<TOutput>
     {
-        private int _firstNum;
-        private int _secondNum;
+        public IOperatorStrategy<TOutput> SetOperator { private get; set; }
 
-        public Calculator(IOperatorStrategy operatorStrategy, int firstNum, int secondNum) 
+        public Calculator(IOperatorStrategy<TOutput> operatorStrategy)
         {
-            OperatorStrategy = operatorStrategy;
-            _firstNum = firstNum;
-            _secondNum = secondNum;
+            SetOperator = operatorStrategy;
         }
 
-        public IOperatorStrategy OperatorStrategy { private get; set; }
-        
-        public void Operate()
+
+        public TOutput Operate(double a, double b)
         {
-             OperatorStrategy.Operate(_firstNum, _secondNum);
+            return SetOperator.Operate(a, b);
         }
 
     }

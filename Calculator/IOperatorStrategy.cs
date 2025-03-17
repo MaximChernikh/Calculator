@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Calculator
 {
-    internal interface IOperatorStrategy
+    internal interface IOperatorStrategy<out TOutput>
     {
-        public void Operate(int a, int b);
+        TOutput Operate(double a, double b);
     }
 }
